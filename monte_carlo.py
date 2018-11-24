@@ -103,7 +103,7 @@ def plot_statdist_occupation_freq(P, sd, num_states, freq):
     trace1 = go.Scatter(
             x=[i+1 for i in range(num_states)],
             y = [i[1]/count for i in reversed(freq)],
-            name="emperical occupation frequency distribution",
+            name="emperical occupation freq",
             )
     fig = go.Figure(data=[trace0, trace1], layout=layout)
     offline.plot(fig, image='png', filename = "emperical_vs_stat_distribution")
@@ -111,8 +111,8 @@ def plot_statdist_occupation_freq(P, sd, num_states, freq):
 
 def plot_state_distribution(freq, num_states):
     x = [i+1 for i in range(len(freq))]
-    y = [i[1] for i in reversed(freq)]
-    logy = list(map(lambda x : math.log10(x), y))
+    tot = sum([i[1] for i in freq])
+    y = [i[1]/tot for i in reversed(freq)]
     layout = go.Layout(
             title="Command Occupation Frequency Distribution",
             xaxis=dict(
@@ -121,10 +121,10 @@ def plot_state_distribution(freq, num_states):
                 title="command",
                 ),
             yaxis=dict(
-                title="log base 10 of number of occurences",
+                title="percent of occurences",
                 ),
             )
-    trace = go.Scatter(x=x, y=logy)
+    trace = go.Scatter(x=x, y=y)
     fig = go.Figure(data=[trace], layout=layout)
     offline.plot(
             fig,
@@ -166,6 +166,7 @@ def simulate_chain(P, xlen, num_states, freq, filtered_commands, index):
             y=run,
             mode="lines+markers",
             name="simulated",
+            line=dict(width=1),
             )
     y = []
     for command in commands[:xlen]:
@@ -176,6 +177,7 @@ def simulate_chain(P, xlen, num_states, freq, filtered_commands, index):
             y=y,
             mode="lines+markers",
             name="emperical",
+            line=dict(width=1),
             )
     fig = go.Figure(data=[simulated,emperical], layout=layout)
     offline.plot(
@@ -188,6 +190,7 @@ def simulate_chain(P, xlen, num_states, freq, filtered_commands, index):
 def calculate_mixing_time(P, num_states, freq, filtered_commands, index, sd):
     commands = reduce(lambda x,y : x + y, filtered_commands, [])
 
+    mixing_var = []
     run = []
     counts = {i+1:0 for i in range(num_states)}
     for command in commands:
