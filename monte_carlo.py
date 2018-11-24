@@ -71,6 +71,26 @@ def create_transition_matrix(index, num_states, filtered_commands):
     return P
 
 
+def plot_transition_heatmap(P, freq, num_states):
+    layout = go.Layout(
+            title="Transition Matrix Heatmap",
+            xaxis=dict(
+                title="Command",
+                tickvals = [i for i in range(num_states)],
+                ticktext = [i[0] for i in reversed(freq)],
+                side='top',
+                ),
+            yaxis=dict(
+                title="Command",
+                tickvals = [i for i in reversed(range(num_states))],
+                ticktext = [i[0] for i in reversed(freq)],
+                ),
+            )
+    trace0 = go.Heatmap(z=list(reversed(P)))
+    fig = go.Figure(data=[trace0], layout=layout)
+    offline.plot(fig, image='png', filename = "transition_matrix_heatmap")
+
+
 def compute_stationary_distribution(P, num_states, freq):
     p2 = np.matmul(P,P)
     for i in range(1000):
@@ -318,10 +338,12 @@ def main(args):
         all_unfiltered_content.append(content)
 
     cleaned_inputs, all_freq = parse_all_data(all_unfiltered_content)
-    freq = sorted([val for key, val in all_freq.items()])
+    freq = [(key, val) for key, val in all_freq.items()]
+    freq.sort(key=lambda tup: tup[1])
+    top_keys = [key[0] for key in freq[-num_states:]]
     filtered_freq = {}
     for key, val in all_freq.items():
-        if val in freq[-num_states:]:
+        if key in top_keys:
             filtered_freq[key] = val
 
     filtered_commands = []
@@ -355,6 +377,8 @@ def main(args):
         plot_portion_timeseries(filtered_commands, num_states, index, freq, xlen)
     if args.of:
         plot_state_distribution(freq, num_states)
+    if args.ptm:
+        plot_transition_heatmap(P, freq, num_states)
 
 
 if __name__ == "__main__":
@@ -390,6 +414,11 @@ if __name__ == "__main__":
             "-of",
             action="store_true",
             help="plots the occupation frequency distribution",
+            )
+    parser.add_argument(
+            "-ptm",
+            action="store_true",
+            help="plots the transition matrix as a heatmap",
             )
 
 
