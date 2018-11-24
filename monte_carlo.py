@@ -85,6 +85,7 @@ def plot_transition_heatmap(P, freq, num_states):
                 tickvals = [i for i in reversed(range(num_states))],
                 ticktext = [i[0] for i in reversed(freq)],
                 ),
+            margin=go.layout.Margin(t=185),
             )
     trace0 = go.Heatmap(z=list(reversed(P)))
     fig = go.Figure(data=[trace0], layout=layout)
