@@ -124,10 +124,10 @@ def plot_statdist_occupation_freq(P, sd, num_states, freq):
     trace1 = go.Scatter(
             x=[i+1 for i in range(num_states)],
             y = [i[1]/count for i in reversed(freq)],
-            name="emperical occupation freq",
+            name="Empirical occupation freq",
             )
     fig = go.Figure(data=[trace0, trace1], layout=layout)
-    offline.plot(fig, image='png', filename = "emperical_vs_stat_distribution")
+    offline.plot(fig, image='png', filename = "empirical_vs_stat_distribution")
 
 
 def plot_state_distribution(freq, num_states):
@@ -193,14 +193,14 @@ def simulate_chain(P, xlen, num_states, freq, filtered_commands, index):
     for command in commands[:xlen]:
         indx = index[command]
         y.append(indx)
-    emperical = go.Scatter(
+    empirical = go.Scatter(
             x=[i for i in range(xlen)],
             y=y,
             mode="lines+markers",
-            name="emperical",
+            name="empirical",
             line=dict(width=1),
             )
-    fig = go.Figure(data=[simulated,emperical], layout=layout)
+    fig = go.Figure(data=[simulated, empirical], layout=layout)
     offline.plot(
             fig,
             image='png',
@@ -243,7 +243,7 @@ def calculate_mixing_time(P, num_states, freq, filtered_commands, index, sd):
 
 def plot_entire_time_series(filtered_commands, num_states, index, freq):
     """
-    ets is short for emperical time series
+    ets is short for empirical time series
     """
     colors = [
             "0,0,255",
