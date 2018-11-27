@@ -209,26 +209,35 @@ def simulate_chain(P, xlen, num_states, freq, filtered_commands, index):
 
 
 def calculate_mixing_time(P, num_states, freq, filtered_commands, index, sd):
-    commands = reduce(lambda x,y : x + y, filtered_commands, [])
-
     mixing_var = []
-    run = []
-    counts = {i+1:0 for i in range(num_states)}
-    for command in commands:
-        ind = index[command]
-        counts[ind] += 1
-        tot = sum([val for key, val in counts.items()])
-        dist_so_far = np.array([val/tot for key, val in counts.items()])
-
-        variance = np.linalg.norm(sd - dist_so_far, ord=2)
-        mixing_var.append(variance)
+    state = random.randint(0, num_states-1)
+    counts = [0 for i in range(num_states)]
+    counts[state] += 1
+    dist_so_far = np.array([val for val in counts])
+    variance = np.linalg.norm(sd - dist_so_far, ord=1)
+    mixing_var.append(variance)
+    for i in range(1000):
+        transition_row = P[state, :]
+        coin_flip = random.random()
+        s = 0
+        for next_state, j in enumerate(transition_row):
+            if coin_flip >= s and coin_flip <= s+j:
+                state = next_state
+                counts[state] += 1
+                tot = sum(counts)
+                dist_so_far = np.array([val/tot for val in counts])
+                variance = np.linalg.norm(sd - dist_so_far, ord=1)
+                mixing_var.append(variance)
+                break
+            else:
+                s += j
 
     layout = go.Layout(
             title="Total variantion distance from empirical distribution to stationary distribution",
             xaxis=dict(title ="steps"),
             )
     trace = go.Scatter(
-            x=[i+1 for i in range(len(commands))],
+            x=[i+1 for i in range(1000)],
             y=mixing_var,
             mode="lines+markers",
             name="distance from stat. dist.",
