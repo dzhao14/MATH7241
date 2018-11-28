@@ -78,13 +78,13 @@ stated because the alternatives didn't seem any better.
 \begin{figure}[!htb]
   \centering
   \includegraphics[scale=.45]{../pictures/complete-empirical-timeseries.png}
-  \caption{}
+  \caption{Complete timeseries}
 \end{figure}
 
 \begin{figure}[!htb]
   \centering
   \includegraphics[scale=.45]{../pictures/250-empirical-timesteps.png}
-  \caption{}
+  \caption{Shortened timeseries}
 \end{figure}
 
 We plotted the entire time series and the first 250 steps. (See page 2)
@@ -101,7 +101,7 @@ faith that we had properly cleaned and plotted the data.
 \begin{figure}[!htb]
   \centering
   \includegraphics[scale=.50]{../pictures/empirical-occ-freq-dist.png}
-  \caption{}
+  \caption{Occupation frequencies}
 \end{figure}
 \newpage
 \section{Analysis}
@@ -114,7 +114,7 @@ distribution seemed quite similar to our own experiences.
 \begin{figure}[!htb]
   \centering
   \includegraphics[scale=.50]{../pictures/transition-matrix-heatmap.png}
-  \caption{}
+  \caption{The transition matrix}
 \end{figure}
 
 Next we computed the transition matrix by counting the number of times the chain
@@ -147,12 +147,12 @@ Therefore our stationary distribution is unique and it is equal to a row of the
 transition matrix raised to a high power. We plot the distribution against the
 occupation frequency there is no surprise that the distributions are identical.
 (See Figure $7$ in the Appendix) Since there are no zero values in the
-stationary distribution, the chain is regular.
+stationary distribution and there are states that can loop back into themselves, the chain is regular.
 
 \begin{figure}[!htb]
   \centering
   \includegraphics[scale=.45]{../pictures/simul-chain-vs-empirical-chain.png}
-  \caption{}
+  \caption{Simulation timeseries}
 \end{figure}
 
 We simulated the chain for $250$ time steps. The initial state was chosen
@@ -179,7 +179,7 @@ converge quite rapidly to the stationary distribution.
 \begin{figure}[!htb]
   \centering
   \includegraphics[scale=.45]{../pictures/mixing-time-analysis.png}
-  \caption{}
+  \caption{Distance between true distribution and partial}
 \end{figure}
 
 \clearpage
@@ -189,7 +189,7 @@ converge quite rapidly to the stationary distribution.
 \begin{figure}[!htb]
   \centering
   \includegraphics[scale=.50]{../pictures/stat-dist-and-empirical-occ-freq-dist.png}
-  \caption{}
+  \caption{The calculated stationary distribution and the one derived from the data}
 \end{figure}
 
 \end{document}
